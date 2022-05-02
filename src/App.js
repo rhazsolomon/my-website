@@ -7,7 +7,7 @@ import OweMessagePage from './pages/OweMessagePage'
 function App() {
   return (
     <div className="App flex flex-col w-screen h-screen items-center justify-center">
-      <MyWebsiteLandingPage />
+      {/* <MyWebsiteLandingPage /> */}
       <OweMessagePage />
     </div>
   );
