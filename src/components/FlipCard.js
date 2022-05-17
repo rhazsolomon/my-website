@@ -7,7 +7,7 @@ const addStyles = (styles) => {
     document.head.appendChild(styleSheet)
 }
 
-const FlipCard = ({front, back}) => {
+const FlipCard = ({ front, back, className }) => {
     addStyles(`
         .backface-hidden {
             backface-visibility: hidden;
@@ -24,7 +24,7 @@ const FlipCard = ({front, back}) => {
     const hoverStyles = 'flipped-y'
     const notHoverStyles = ''
     return (
-        <div className="w-80 h-96 relative hover:cursor-pointer" onMouseEnter={onMouseEnter} onMouseLeave={onMouseEnter}>
+        <div className={`${className} relative hover:cursor-pointer`} onMouseEnter={onMouseEnter} onMouseLeave={onMouseEnter}>
             <div className={`h-full w-full rounded-lg shadow-md border border-gray-200 bg-green-300 transition-transform duration-1000 absolute backface-hidden text-center ${isHover ? hoverStyles : notHoverStyles}`}>
                 {front}
             </div>
