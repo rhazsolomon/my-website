@@ -17,7 +17,13 @@ module.exports = {
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      animation: {
+        'bounce-slow-1': 'bounce 3s infinite',
+        'bounce-slow-2': 'bounce 4s infinite',
+        'bounce-slow-3': 'bounce 3.5s infinite'
+      }
+    },
     fontFamily: {
       'display': ['Oswald'],
       'body': ['"Open Sans"'],

@@ -7,6 +7,7 @@ import TimelineAppPage from './pages/TimelineAppPage'
 import MyResume from './pages/MyResume';
 import FlipCard from './components/FlipCard';
 import WorkInProgress from './components/WorkInProgress'
+import MyResumeSmallScreen from './pages/MyResumeSmallScreen'
 
 
 function App() {
@@ -14,8 +15,10 @@ function App() {
     <div className="App flex flex-col w-screen h-screen items-center justify-center">
       {/* <MyWebsiteLandingPage /> */}
       {/* <OweMessagePage /> */}
-      <WorkInProgress className="md:hidden" />
+      {/* <WorkInProgress className="md:hidden" /> */}
+      <MyResumeSmallScreen className="md:hidden" />
       <MyResume className="hidden md:flex" />
+
       {/* <FlipCard className={'w-2/3 h-2/3'} front={<MyResume />} back={"Hello"} /> */}
     </div>
   );

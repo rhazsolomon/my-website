@@ -1,5 +1,5 @@
 {
-    "aboutMe": "A fun person who enjoys being challenged!  I organise and play in the Sharesies football team, Footsies as well as am an avid member of the company boxing group.\n\nI love making things look pretty and be perfect.\nI am a performing, just wrapping up a season of performing Translations in the Gryphon theatre, coming from improv comedy.",
+    "aboutMe": "I'm an enthusiastic and optimistic full stack developer! I like to think I bring a warm and supportive presence to daily office life.  I organize and play in my company football and boxing team.  I love tramping, chess, mathematics, gymnastics and am devoted to maintaining a zettelkasten. Outside of work, I am a committed thespian, I made my start by joining the Improv Comedy Club at university and have subsequently been cast in a variety of stage shows. I love to listen to audio books and podcasts - ask me about them at your own peril.",
     "technologies": [
         "JavaScript",
         "HTML",
@@ -8,40 +8,47 @@
         ".NET",
         "AWS",
         "SQL",
-        "React"
+        "React",
+        "Git",
+        "API"
     ],
     "workExperiences": [
         {
             "company": "Sharesies Ltd",
+            "href": "https://www.sharesies.nz/",
             "date": "2021 - Present",
-            "role": "Intermediate Develoepr",
-            "description": "Worked primarily as a Full Stack Developer building out the internal software required for operators to perform business critical operations. Backend was in Python 3.8 deploying in the cloud using AWS with the frontend in Jinja2, React, HTML and TypeScript / JavaScript. Some of the services included work in .NET and I did a bit of infrastructure work with Terraform."
+            "role": "Intermediate Developer",
+            "description": "I work primarily as a Full Stack Developer, building out the internal software required for operators to perform business critical operations. Backend is in Python 3.8, deploying in the cloud using AWS with the frontend in Jinja2, React, HTML and TypeScript / JavaScript. Some of the services include work in .NET and I do a bit of infrastructure work with Terraform."
         },
         {
             "company": "Spark NZ (Qrious Ltd)",
-            "date": "2015-2016",
+            "href": "https://www.qrious.co.nz/",
+            "date": "2019-2021",
             "role": "AI Engineer & Data Science Developer",
-            "description": "I worked on several interesting projects including an Audio Classifier used to classify the South Island Kokako. The job primarily involved working with AWS, Kubernetes, ML frameworks such as TensorFlow and FastAI."
+            "description": "I engaged in numerous client interactions including regular project updates, final project demonstrations, presentations and pair development with external developers. I delivered a web app designed to simplify the process of training ML models for audio classification. I managed AWS cloud infrastructure for deploying Machine Learning pipelines."
         },
         {
             "company": "Inspiration Education",
+            "href": "https://inspirationeducation.co.nz/",
             "date": "2016-2020",
             "role": "Team Leader & Tutor",
-            "description": "Tutored people and lead a team of 6 tutors."
+            "description": "I was responsible for overseeing a team of tutors. I chaired fortnightly meetings and provided professional and emotional support to my team. I tutored NCEA Level 1, 2, 3 and Scholarship Physics and Mathematics. This enhanced my patience, empathy and the ability to build rapport with others."
         }
     ],
     "educationExperiences": [
         {
             "company": "Victoria University of Wellington",
+            "href": "https://www.wgtn.ac.nz/",
             "date": "2016 - 2019",
             "role": "First Class Honours",
-            "description": "Bachelor of Engineering, majoring in Software Engineering with First Class Honours, BE(Hons)"
+            "description": "Bachelor of Engineering, majoring in Software Engineering with First Class Honours, BE(Hons).  Dean's List 2016 - 2019.  Vice-chancellor's Excellence Scholarship."
         },
         {
             "company": "Whanganui High School",
+            "href": "https://www.whanganuihigh.school.nz/",
             "date": "2011 - 2015",
-            "role": "Head Boy",
-            "description": "First Class Honours, majoring in Software Engineerin"
+            "role": "NCEA Level 1-3 with Excellence",
+            "description": "Head Boy of 2015.  I was selected to represent New Zealand at the World Schools Debating Championships, The Hague International Model United Nations and the International Space Academy."
         }
     ]
 }
