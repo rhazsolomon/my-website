@@ -5,7 +5,7 @@ import HStack from "../components/HStack";
 
 import { generateList, random, sample, subset, randomDate } from "../utility/util";
 
-import { FaDollarSign, FaEnvira, FaTag, FaPlus, FaArrowUp } from "react-icons/fa";
+import { FaDollarSign, FaEnvira, FaTag, FaPlus, FaArrowUp, FaFilter } from "react-icons/fa";
 import PieChart from "../components/PieChart";
 
 
@@ -37,7 +37,7 @@ const TransactionElementAmount = ({ amount }) => {
 }
 const TransactionElementCategory = ({ category }) => {
     return (
-        <HStack className="gap-2 border-2 h-auto w-auto py-1 px-2 rounded-lg" style={{ borderColor: categoryMap[category].color }}>
+        <HStack className="gap-2 border-[1pt] h-auto w-auto py-1 px-2 rounded-lg" style={{ borderColor: categoryMap[category].color }}>
             <FaEnvira style={{ fill: categoryMap[category].color }} />
             {categoryMap[category].label}
         </HStack>
@@ -54,7 +54,7 @@ const TransactionElementTag = ({ tag_id }) => {
         </>)
     }
     return (
-        <HStack className='w-min inline h-auto border-2 gap-2 border-gray-500 text-gray-500 px-4 rounded-full py-1'>
+        <HStack className='w-min inline h-auto border-[1pt] gap-2 border-gray-500 text-gray-500 px-4 rounded-full py-1'>
             {content}
         </HStack>
     )
@@ -62,17 +62,22 @@ const TransactionElementTag = ({ tag_id }) => {
 
 const TransactionElement = ({ transaction }) => {
     return (
-        <VStack className='max-w-[600px] px-5 h-auto  p-2 rounded-xl hover:bg-slate-700'>
-            <HStack className="w-full h-auto">
-                <TransactionElementCategory category={transaction.category} />
-                <TransactionElementAmount amount={transaction.amount} />
-            </HStack>
-            <div className="flex-wrap flex py-2 h-auto gap-2">
-                {transaction.tags.map(t => (<TransactionElementTag tag_id={t} />))}
-                <TransactionElementTag />
-            </div>
-            <div>{transaction.date.toDateString()}</div>
-        </VStack>
+        <HStack className='p-4 gap-3 hover:bg-[#272727]'>
+            <div className="w-1 h-full  rounded ml-2"
+                style={{ backgroundColor: categoryMap[transaction.category].color }}></div>
+            <VStack className='max-w-[600px] h-auto  '>
+                <HStack className="w-full h-auto">
+                    <TransactionElementCategory category={transaction.category} />
+                    <TransactionElementAmount amount={transaction.amount} />
+                </HStack>
+                <div className="flex-wrap flex py-2 h-auto gap-2">
+                    {transaction.tags.map(t => (<TransactionElementTag tag_id={t} />))}
+                    <TransactionElementTag />
+                </div>
+                <div>{transaction.date.toDateString()}</div>
+            </VStack>
+        </HStack>
+
 
     )
 }
@@ -83,7 +88,7 @@ const TransactionList = ({ transactions, selectedCategoryId, filteredTagIds }) =
         .filter(t => filteredTagIds == null | subset(filteredTagIds, t.tags))
     )
     return (
-        <VStack className=' gap-4 overflow-y-auto scrollbar-hide items-start justify-start'>
+        <VStack className=' overflow-y-auto scrollbar-hide items-start justify-start'>
             {displayTransactions.map(t => (
                 <TransactionElement transaction={t} />
             ))}
@@ -98,8 +103,12 @@ const FilterOrderByComponent = ({ orderByIdx, setOrderByIdx, orderAscending, set
         transition: 'transform 0.5s'
     }
     return (
-        <HStack className='rounded-full bg-slate-400 w-min gap-2 hover:opacity-80 hover:bg-slate-600' >
-            <div onClick={() => setOrderAscending(!orderAscending)} style={arrowStyle} className='bg-slate-500 p-2 rounded-full hover:bg-slate-600'>
+        <HStack className='rounded-full bg-slate-400 border-[1px] border-slate-300  w-min gap-2 hover:opacity-80 hover:bg-slate-600 text-slate-100' >
+            <div
+                onClick={() => setOrderAscending(!orderAscending)}
+                style={arrowStyle}
+                className='bg-slate-500 p-2 rounded-full hover:bg-slate-600 shadow-slate-500'
+            >
                 <FaArrowUp />
             </div>
 
@@ -110,7 +119,10 @@ const FilterOrderByComponent = ({ orderByIdx, setOrderByIdx, orderAscending, set
 
 const Filter = ({ filteredTagIds, setFilteredTagIds, orderByIdx, setOrderByIdx, orderAscending, setOrderAscending }) => {
     return (
-        <VStack className='bg-slate-700 p-4 h-auto gap-2 rounded-xl'>
+        <VStack className='bg-[#272727] p-4 m-4 w-auto h-auto gap-2 rounded-xl border-[1px] border-slate-600'>
+            <HStack className='text-slate-400'>
+                <FaFilter />
+            </HStack>
             <FilterOrderByComponent orderByIdx={orderByIdx} setOrderByIdx={setOrderByIdx} orderAscending={orderAscending} setOrderAscending={setOrderAscending} />
             <HStack className=" rounded-lg  gap-4">
                 {filteredTagIds.map(tagId => (<TransactionElementTag tag_id={tagId} />))}
@@ -129,15 +141,15 @@ function createNewTransaction(category = null, amount = null, tags = null) {
     }
 }
 
-const allTransactions = generateList(createNewTransaction, 100)
+const allTransactions = generateList(createNewTransaction, 40)
 
 
 const PieChartPage = () => {
 
     const [selectedCategoryId, setSelectedCategoryId] = useState(null)
     const [filteredTagIds, setFilteredTagIds] = useState([
-        'tag_0F0D9CF7-9197-464E-BA6A-9D33B2540639',
-        'tag_47932CFC-CD6E-4AA8-B9A3-FFEC1503F363'
+        // 'tag_0F0D9CF7-9197-464E-BA6A-9D33B2540639',
+        // 'tag_47932CFC-CD6E-4AA8-B9A3-FFEC1503F363'
     ])
     const [orderByIdx, setOrderByIdx] = useState(1)
     const [orderAscending, setOrderAscending] = useState(true)
@@ -158,20 +170,21 @@ const PieChartPage = () => {
 
     function computePieDataFromTransactions(transactions) {
         let categoryToAmount = {}
+
         for (let t of transactions) {
             if (categoryToAmount[t.category] === undefined) { categoryToAmount[t.category] = 0 }
             categoryToAmount[t.category] = categoryToAmount[t.category] + t.amount
         }
         const data = []
         for (const [key, value] of Object.entries(categoryToAmount)) {
-            data.push({ name: key, value: value, color: categoryMap[key].color, mutedColor: categoryMap[key].mutedColor })
+            data.push({ name: key, value: value, color: categoryMap[key].color })
         }
         return data.sort((a, b) => a.name.localeCompare(b.name))
     }
 
     return (
-        <div className='flex flex-col-reverse md:flex-row h-screen items-center bg-[#23262A] text-white w-screen p-10 font-rhaz'>
-            <VStack className='gap-5 max-w-[600px] overflow-y-auto h-full'>
+        <div className='flex flex-col-reverse md:flex-row h-screen items-center bg-[#272727] text-white w-screen font-rhaz text-sm'>
+            <VStack className='max-w-[500px] overflow-y-auto h-full bg-[#222222]'>
                 <Filter filteredTagIds={filteredTagIds} setFilteredTagIds={setFilteredTagIds} orderByIdx={orderByIdx} setOrderByIdx={setOrderByIdx} orderAscending={orderAscending} setOrderAscending={setOrderAscending} />
                 <TransactionList transactions={transactions} selectedCategoryId={selectedCategoryId} filteredTagIds={filteredTagIds} />
             </VStack>

@@ -12,7 +12,6 @@ const backfaceVisibility = plugin(function ({ addUtilities }) {
 });
 
 module.exports = {
-  content: [],
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
   ],

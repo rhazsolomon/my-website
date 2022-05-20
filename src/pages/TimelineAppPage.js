@@ -13,7 +13,7 @@ const HideAwayFormAndDisplay = ({ form, display }) => {
 const TimelineForm = () => {
     return (
         <div className="h-full w-1/4 p-16">
-            <form className="bg-red-100 w-full h-full border-2">
+            <form className="bg-red-100 w-full h-full border-[1pt]">
                 <input />
 
             </form>

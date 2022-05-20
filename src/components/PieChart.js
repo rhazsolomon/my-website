@@ -2,8 +2,9 @@ import { PieChart as Pie } from "react-minimal-pie-chart";
 
 const PieChartValue = ({ data, d }) => {
     const total = data.reduce((a, b) => a + b.value, 0)
+    console.log(data)
     return (
-        <div className="flex flex-col h-full justify-center items-center content-center ">
+        <div className="flex flex-col h-full justify-center items-center content-center">
             {d && (
                 <div
                     className="text-2xl font-medium"
@@ -51,7 +52,7 @@ const PieChart = ({ data, selectedCategoryId, setSelectedCategoryId }) => {
     }
 
     return (
-        <div className="relative w-full h-full ">
+        <div className="relative w-full h-full max-h-80 max-w-80">
             <div className=" w-full h-full absolute">
                 <Pie
                     data={data}
