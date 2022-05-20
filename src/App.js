@@ -16,9 +16,9 @@ function App() {
       {/* <MyWebsiteLandingPage /> */}
       {/* <OweMessagePage /> */}
       {/* <WorkInProgress className="md:hidden" /> */}
-      <MyResumeSmallScreen className="md:hidden" />
-      <MyResume className="hidden md:flex" />
-      {/* <PieChartPage /> */}
+      {/* <MyResumeSmallScreen className="md:hidden" />
+      <MyResume className="hidden md:flex" /> */}
+      <PieChartPage />
       {/* <FlipCard className={'w-2/3 h-2/3'} front={<MyResume />} back={"Hello"} /> */}
     </div>
   );

@@ -29,5 +29,7 @@ module.exports = {
       'body': ['"Open Sans"'],
     }
   },
-  plugins: [],
+  plugins: [
+    require('tailwind-scrollbar-hide')
+  ],
 }
