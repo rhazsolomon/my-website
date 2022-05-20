@@ -65,23 +65,21 @@ const RhazPieChart = ({ transactions, selectedCategoryId, setSelectedCategoryId 
         }
     }
     return (
-        <HStack className='justify-center'>
-            <div className="w-full h-full">
-                <PieChart
-                    data={data}
-                    lineWidth={50}
-                    onClick={(e, i) => { toggleSelectedIndex(i) }}
-                    segmentsShift={computeSegmentsShift}
-                    rounded={false}
-                    radius={40}
-                    segmentsStyle={computeSegmentsStyle}
-                    className={'relative'}
-                    onMouseOver={(i) => { i.target.style.opacity = '90%' }}
-                    onMouseOut={(i) => { i.target.style.opacity = '100%' }}
-                />
-            </div>
-
-        </HStack>
+        <div className="w-full h-full">
+            <PieChart
+                data={data}
+                lineWidth={50}
+                onClick={(e, i) => { toggleSelectedIndex(i) }}
+                segmentsShift={computeSegmentsShift}
+                rounded={false}
+                radius={40}
+                segmentsStyle={computeSegmentsStyle}
+                className={'relative'}
+                onMouseOver={(i) => { i.target.style.opacity = '90%' }}
+                onMouseOut={(i) => { i.target.style.opacity = '100%' }}
+            />
+            {/* <div className="relative bg-red-200">100</div> */}
+        </div>
 
 
     )

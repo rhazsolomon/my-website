@@ -10,17 +10,21 @@ import WorkInProgress from './components/WorkInProgress'
 import MyResumeSmallScreen from './pages/MyResumeSmallScreen'
 import PieChartPage from './pages/PieChartPage'
 
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Link
+} from "react-router-dom";
+
 function App() {
   return (
-    <div className="App flex flex-col w-screen h-screen items-center justify-center">
-      {/* <MyWebsiteLandingPage /> */}
-      {/* <OweMessagePage /> */}
-      {/* <WorkInProgress className="md:hidden" /> */}
-      {/* <MyResumeSmallScreen className="md:hidden" />
-      <MyResume className="hidden md:flex" /> */}
-      <PieChartPage />
-      {/* <FlipCard className={'w-2/3 h-2/3'} front={<MyResume />} back={"Hello"} /> */}
-    </div>
+    <Router>
+      <Routes>
+        <Route path='/' element={<MyResume />} />
+        <Route path='/pie' element={<PieChartPage />} />
+      </Routes>
+    </Router>
   );
 }
 

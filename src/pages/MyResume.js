@@ -7,6 +7,7 @@ import SocialLinks from '../components/SocialLinks'
 import profile from '../static/profile.jpeg'
 import { FiMapPin, FiPhone, FiMail, FiGlobe } from 'react-icons/fi'
 import resumeData from '../static/resume_data'
+import MyResumeSmallScreen from "./MyResumeSmallScreen";
 
 const ProfilePicture = () => {
     return (
@@ -136,9 +137,8 @@ const MyTechnologiesSection = () => {
         </div>
     )
 }
-const MyResume = (props) => {
 
-
+const MyResumeLargeScreen = (props) => {
     return (
         <HStack className={`${props.className} text-gray-300 text-left shadow-md justify-start text-xs h-screen`}>
             <VStack className="bg-slate-800 gap-6 justify-start p-8 items-start w-1/3 h-screen overflow-y-auto">
@@ -154,6 +154,16 @@ const MyResume = (props) => {
                 <div className="h-full"></div>
             </VStack>
         </HStack>
+    )
+}
+
+const MyResume = (props) => {
+    return (
+        <div className="flex flex-col h-screen items-center justify-center text-center">
+            <MyResumeSmallScreen className="md:hidden" />
+            <MyResumeLargeScreen className="hidden md:flex" />
+        </div>
+
     )
 }
 
