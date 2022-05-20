@@ -26,7 +26,8 @@ module.exports = {
     },
     fontFamily: {
       'display': ['Oswald'],
-      'body': ['"Open Sans"'],
+      'body': ['Open Sans'],
+      'rhaz': ['Avenir']
     }
   },
   plugins: [

@@ -1,10 +1,12 @@
-import { FaDollarSign, FaEnvira, FaTag, FaPlus, FaArrowUp } from "react-icons/fa";
-import { MdOutlineAlignHorizontalLeft } from "react-icons/md"
-import VStack from "../components/VStack";
-import { PieChart } from "react-minimal-pie-chart";
 import { useState } from "react";
+
+import VStack from "../components/VStack";
 import HStack from "../components/HStack";
+
 import { generateList, random, sample, subset, randomDate } from "../utility/util";
+
+import { FaDollarSign, FaEnvira, FaTag, FaPlus, FaArrowUp } from "react-icons/fa";
+import PieChart from "../components/PieChart";
 
 
 const categoryMap = {
@@ -22,68 +24,7 @@ const tagMap = {
 }
 const orderByOptions = ['Date', 'Amount']
 
-const RhazPieChart = ({ transactions, selectedCategoryId, setSelectedCategoryId }) => {
-    // const [data[i].name === selectedIdx, setdata[i].name === SelectedIdx] = useState(null)
 
-    function computePieDataFromTransactions(transactions) {
-        let categoryToAmount = {}
-        for (let t of transactions) {
-            if (categoryToAmount[t.category] === undefined) { categoryToAmount[t.category] = 0 }
-            categoryToAmount[t.category] = categoryToAmount[t.category] + t.amount
-        }
-        const data = []
-        for (const [key, value] of Object.entries(categoryToAmount)) {
-            data.push({ name: key, value: value, color: categoryMap[key].color, mutedColor: categoryMap[key].mutedColor })
-        }
-        return data.sort((a, b) => a.name.localeCompare(b.name))
-    }
-
-    const data = computePieDataFromTransactions(transactions)
-
-
-    const computeSegmentsShift = (i) => {
-        if (data[i].name === selectedCategoryId) { return 4 }
-        return 0
-    }
-    const toggleSelectedIndex = (i) => {
-        if (data[i].name === selectedCategoryId) {
-            setSelectedCategoryId(null)
-        } else {
-            setSelectedCategoryId(data[i].name)
-        }
-
-    }
-    const computeSegmentsStyle = (i) => {
-        let opacity = '100%'
-        if (selectedCategoryId !== null) {
-            opacity = data[i].name === selectedCategoryId ? '100%' : '20%'
-        }
-        return {
-            transition: 'd 0.2s ease-in-out, opacity 0.2s',
-            stroke: data[i].color,
-            opacity: opacity
-        }
-    }
-    return (
-        <div className="w-full h-full">
-            <PieChart
-                data={data}
-                lineWidth={50}
-                onClick={(e, i) => { toggleSelectedIndex(i) }}
-                segmentsShift={computeSegmentsShift}
-                rounded={false}
-                radius={40}
-                segmentsStyle={computeSegmentsStyle}
-                className={'relative'}
-                onMouseOver={(i) => { i.target.style.opacity = '90%' }}
-                onMouseOut={(i) => { i.target.style.opacity = '100%' }}
-            />
-            {/* <div className="relative bg-red-200">100</div> */}
-        </div>
-
-
-    )
-}
 
 const TransactionElementAmount = ({ amount }) => {
 
@@ -214,13 +155,28 @@ const PieChartPage = () => {
         // .filter(a => a.category == 'category_84A707AD-8E1C-4CC2-AA27-CE23036748BC')
         .sort(orderByFunction)
     )
+
+    function computePieDataFromTransactions(transactions) {
+        let categoryToAmount = {}
+        for (let t of transactions) {
+            if (categoryToAmount[t.category] === undefined) { categoryToAmount[t.category] = 0 }
+            categoryToAmount[t.category] = categoryToAmount[t.category] + t.amount
+        }
+        const data = []
+        for (const [key, value] of Object.entries(categoryToAmount)) {
+            data.push({ name: key, value: value, color: categoryMap[key].color, mutedColor: categoryMap[key].mutedColor })
+        }
+        return data.sort((a, b) => a.name.localeCompare(b.name))
+    }
+
     return (
-        <div className='flex flex-col-reverse md:flex-row h-screen items-center bg-[#23262A] text-white w-screen p-10'>
+        <div className='flex flex-col-reverse md:flex-row h-screen items-center bg-[#23262A] text-white w-screen p-10 font-rhaz'>
             <VStack className='gap-5 max-w-[600px] overflow-y-auto h-full'>
                 <Filter filteredTagIds={filteredTagIds} setFilteredTagIds={setFilteredTagIds} orderByIdx={orderByIdx} setOrderByIdx={setOrderByIdx} orderAscending={orderAscending} setOrderAscending={setOrderAscending} />
                 <TransactionList transactions={transactions} selectedCategoryId={selectedCategoryId} filteredTagIds={filteredTagIds} />
             </VStack>
-            <RhazPieChart transactions={transactions} selectedCategoryId={selectedCategoryId} setSelectedCategoryId={setSelectedCategoryId} />
+            <PieChart data={computePieDataFromTransactions(transactions)} selectedCategoryId={selectedCategoryId} setSelectedCategoryId={setSelectedCategoryId} />
+
         </div>
     )
 }
