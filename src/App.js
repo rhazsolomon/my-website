@@ -8,7 +8,7 @@ import MyResume from './pages/MyResume';
 import FlipCard from './components/FlipCard';
 import WorkInProgress from './components/WorkInProgress'
 import MyResumeSmallScreen from './pages/MyResumeSmallScreen'
-
+import PieChartPage from './pages/PieChartPage'
 
 function App() {
   return (
@@ -18,7 +18,7 @@ function App() {
       {/* <WorkInProgress className="md:hidden" /> */}
       <MyResumeSmallScreen className="md:hidden" />
       <MyResume className="hidden md:flex" />
-
+      {/* <PieChartPage /> */}
       {/* <FlipCard className={'w-2/3 h-2/3'} front={<MyResume />} back={"Hello"} /> */}
     </div>
   );
