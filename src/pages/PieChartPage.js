@@ -8,25 +8,9 @@ import { generateList, random, sample, subset, randomDate, parseCSV } from "../u
 import { FaDollarSign, FaEnvira, FaTag, FaPlus, FaArrowUp, FaFilter } from "react-icons/fa";
 import PieChart from "../components/PieChart";
 import { dbSet } from "../database/db";
+import { getByLabelText } from "@testing-library/react";
 
-
-const categoryMap = {
-    'category_84A707AD-8E1C-4CC2-AA27-CE23036748BC': { label: 'food', color: '#1EAEF8' },
-    'category_D092A669-D73E-488F-9A98-94C314D6593A': { label: 'clothes', color: '#FFD400' },
-    'category_8A13196D-5F8C-4FC6-934F-979ECA2FA9AD': { label: 'unknown', color: '#C2C7CC' },
-    'category_D4EC9AB5-D5A8-4E78-9A75-9D3CE2E79474': { label: 'rent', color: '#4BBE5D' },
-    'category_F8FF161A-ED49-4FE2-99F6-C21F0B40825E': { label: 'other', color: 'red' }
-}
-const tagMap = {
-    'tag_0F0D9CF7-9197-464E-BA6A-9D33B2540639': 'gift',
-    'tag_7C978860-62A8-46B8-88E5-986C4C3175A3': 'wellington',
-    'tag_47932CFC-CD6E-4AA8-B9A3-FFEC1503F363': 'shop',
-    'tag_1BAFD608-EF63-4F08-A6E7-362F89ACD4FA': 'summer',
-    'tag_6FE3441B-D04B-44DA-9481-7A7DF3D4E497': 'night'
-}
 const orderByOptions = ['Date', 'Amount']
-
-
 
 const TransactionElementAmount = ({ amount }) => {
 
@@ -37,11 +21,13 @@ const TransactionElementAmount = ({ amount }) => {
         </HStack>
     )
 }
-const TransactionElementCategory = ({ category }) => {
+const TransactionElementCategory = ({ category, categories }) => {
+    console.log(category)
+    console.log(categories)
     return (
-        <HStack className="gap-2 border-[1pt] h-auto w-auto py-1 px-2 rounded-lg" style={{ borderColor: categoryMap[category].color }}>
-            <FaEnvira style={{ fill: categoryMap[category].color }} />
-            {categoryMap[category].label}
+        <HStack className="gap-2 border-[1pt] h-auto w-auto py-1 px-2 rounded-lg" style={{ borderColor: getColor(categories, category) }}>
+            <FaEnvira style={{ fill: getColor(categories, category) }} />
+            {getLabel(categories, category)}
         </HStack>
     )
 }
@@ -62,30 +48,27 @@ const TransactionElementTag = ({ tag_id }) => {
     )
 }
 
-const TransactionElement = ({ transaction }) => {
+const TransactionElement = ({ transaction, categories }) => {
     return (
-        <HStack className='p-4 gap-3 hover:bg-[#272727]'>
+        <HStack className='p-4 gap-3 hover:bg-[#272727] h-auto'>
             <div className="w-1 h-full  rounded ml-2"
-                style={{ backgroundColor: categoryMap[transaction.category].color }}></div>
+                style={{ backgroundColor: getColor(categories, transaction.categoryId) }}></div>
             <VStack className='max-w-[600px] h-auto  '>
                 <HStack className="w-full h-auto">
-                    <TransactionElementCategory category={transaction.category} />
+                    <TransactionElementCategory category={transaction.categoryId} categories={categories} />
                     <TransactionElementAmount amount={transaction.amount} />
                 </HStack>
                 <div className="flex-wrap flex py-2 h-auto gap-2">
-                    {transaction.tags.map(t => (<TransactionElementTag tag_id={t} key={t.id + transaction.id} />))}
+                    {transaction.tags?.map(t => (<TransactionElementTag tag_id={t} key={t.id + transaction.id} />))}
                     <TransactionElementTag />
                 </div>
-                <div>{"transaction.date"}</div>
+                <div>{new Date(transaction.date.seconds).toDateString()}</div>
             </VStack>
         </HStack>
     )
 }
 
-
-
-
-const TransactionList = ({ transactions, selectedCategoryId, filteredTagIds }) => {
+const TransactionList = ({ transactions, selectedCategoryId, filteredTagIds, categories }) => {
     const displayTransactions = (transactions
         .filter(t => selectedCategoryId == null | t.category == selectedCategoryId)
         .filter(t => filteredTagIds == null | subset(filteredTagIds, t.tags))
@@ -93,7 +76,7 @@ const TransactionList = ({ transactions, selectedCategoryId, filteredTagIds }) =
     return (
         <VStack className=' overflow-y-auto scrollbar-hide items-start justify-start'>
             {displayTransactions.map(t => (
-                <TransactionElement transaction={t} key={t.id} />
+                <TransactionElement transaction={t} key={t.id} categories={categories} />
             ))}
         </VStack>
     )
@@ -135,23 +118,38 @@ const Filter = ({ filteredTagIds, setFilteredTagIds, orderByIdx, setOrderByIdx, 
     )
 }
 
-function createNewTransaction(category = null, amount = null, tags = null) {
-    return {
-        category: category !== null ? category : random(Object.keys(categoryMap)),
-        amount: amount !== null ? amount : Math.random() * 100,
-        tags: tags !== null ? tags : sample(Object.keys(tagMap), Math.floor(Math.random() * 5)),
-        date: randomDate(new Date(2012, 0, 1), new Date())
+
+function getColor(categories, categoryId) {
+    if (categories === undefined) {
+        return 'blue'
+    }
+    const filtered = categories.filter(c => c.id == categoryId)
+    if (filtered.length) {
+        return filtered[0].color
+    } else {
+        return 'red'
     }
 }
 
-
-
-
+function getLabel(categories, categoryId) {
+    if (categories === undefined) {
+        return 'undefined'
+    }
+    const filtered = categories.filter(c => c.id == categoryId)
+    if (filtered.length) {
+        return filtered[0].label
+    } else {
+        return 'not found'
+    }
+}
 const PieChartPage = () => {
+    const userId = 'user_1b28bb8d-ea48-42cc-acda-4266c3180159'
 
     const [allTransactions, setAllTransactions] = useState([])
     const [categories, setCategories] = useState([])
     const [tags, setTags] = useState([])
+
+
 
     const [selectedCategoryId, setSelectedCategoryId] = useState(null)
     const [filteredTagIds, setFilteredTagIds] = useState([
@@ -179,14 +177,15 @@ const PieChartPage = () => {
         let categoryToAmount = {}
 
         for (let t of transactions) {
-            if (categoryToAmount[t.category] === undefined) { categoryToAmount[t.category] = 0 }
-            categoryToAmount[t.category] = categoryToAmount[t.category] + t.amount
+            if (categoryToAmount[t.categoryId] === undefined) { categoryToAmount[t.categoryId] = 0 }
+            categoryToAmount[t.categoryId] = categoryToAmount[t.categoryId] + Number.parseFloat(t.amount)
         }
         const data = []
         for (const [key, value] of Object.entries(categoryToAmount)) {
-            data.push({ name: key, value: value, color: categoryMap[key].color })
+            data.push({ name: key, value: value, color: getColor(categories, key) })
         }
-        return data.sort((a, b) => a.name.localeCompare(b.name))
+        const ret = data.sort((a, b) => a.name.localeCompare(b.name))
+        return ret
     }
 
     async function handleFileInput(e) {
@@ -218,16 +217,22 @@ const PieChartPage = () => {
 
     // setKeyBindings()
     useEffect(() => {
-        dbSet(setTags, 'user_201BAA2A-0DA7-413D-BFD8-EC6E55F891B2', 'tag')
-        dbSet(setCategories, 'user_201BAA2A-0DA7-413D-BFD8-EC6E55F891B2', 'category')
-        dbSet(setAllTransactions, 'user_201BAA2A-0DA7-413D-BFD8-EC6E55F891B2', 'transaction')
+
+        (async () => {
+            await Promise.all([
+                dbSet(setTags, userId, 'tag'),
+                dbSet(setCategories, userId, 'category'),
+                dbSet(setAllTransactions, userId, 'transaction'),
+            ])
+        })()
+
     }, [])
     return (
         <div className='flex flex-col-reverse md:flex-row h-screen items-center bg-[#272727] text-white w-screen font-rhaz text-sm'>
             <VStack className='max-w-[500px] overflow-y-auto h-full bg-[#222222]'>
                 <input type={'file'} onChange={handleFileInput} />
                 <Filter filteredTagIds={filteredTagIds} setFilteredTagIds={setFilteredTagIds} orderByIdx={orderByIdx} setOrderByIdx={setOrderByIdx} orderAscending={orderAscending} setOrderAscending={setOrderAscending} />
-                <TransactionList transactions={transactions} selectedCategoryId={selectedCategoryId} filteredTagIds={filteredTagIds} />
+                <TransactionList transactions={transactions} selectedCategoryId={selectedCategoryId} filteredTagIds={filteredTagIds} categories={categories} />
             </VStack>
             <PieChart data={computePieDataFromTransactions(transactions)} selectedCategoryId={selectedCategoryId} setSelectedCategoryId={setSelectedCategoryId} />
 

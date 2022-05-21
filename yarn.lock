@@ -9441,6 +9441,7 @@ __metadata:
     react-scripts: 5.0.1
     tailwind-scrollbar-hide: ^1.1.7
     tailwindcss: ^3.0.24
+    uuid: ^8.3.2
     web-vitals: ^2.1.4
   languageName: unknown
   linkType: soft
