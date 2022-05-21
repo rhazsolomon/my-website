@@ -10,6 +10,7 @@ import {
   Routes,
 } from "react-router-dom";
 import LandingPage from './pages/LandingPage';
+import Playground from './pages/Playground';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path='/' element={<LandingPage />} />
         <Route path='/resume' element={<MyResume />} />
         <Route path='/pie' element={<PieChartPage />} />
+        <Route path='/playground' element={<Playground />} />
       </Routes>
     </Router>
   );
