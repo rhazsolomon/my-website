@@ -9,6 +9,7 @@
     "@visx/shape": "^2.10.0",
     "chart.js": "^3.7.1",
     "csv": "^6.0.5",
+    "firebase": "^9.8.1",
     "react": "^18.0.0",
     "react-chartjs-2": "^4.1.0",
     "react-dom": "^18.0.0",

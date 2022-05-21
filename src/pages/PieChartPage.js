@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import VStack from "../components/VStack";
 import HStack from "../components/HStack";
@@ -7,13 +7,15 @@ import { generateList, random, sample, subset, randomDate, parseCSV } from "../u
 
 import { FaDollarSign, FaEnvira, FaTag, FaPlus, FaArrowUp, FaFilter } from "react-icons/fa";
 import PieChart from "../components/PieChart";
+import { dbSet } from "../database/db";
 
 
 const categoryMap = {
     'category_84A707AD-8E1C-4CC2-AA27-CE23036748BC': { label: 'food', color: '#1EAEF8' },
     'category_D092A669-D73E-488F-9A98-94C314D6593A': { label: 'clothes', color: '#FFD400' },
     'category_8A13196D-5F8C-4FC6-934F-979ECA2FA9AD': { label: 'unknown', color: '#C2C7CC' },
-    'category_D4EC9AB5-D5A8-4E78-9A75-9D3CE2E79474': { label: 'rent', color: '#4BBE5D' }
+    'category_D4EC9AB5-D5A8-4E78-9A75-9D3CE2E79474': { label: 'rent', color: '#4BBE5D' },
+    'category_F8FF161A-ED49-4FE2-99F6-C21F0B40825E': { label: 'other', color: 'red' }
 }
 const tagMap = {
     'tag_0F0D9CF7-9197-464E-BA6A-9D33B2540639': 'gift',
@@ -31,7 +33,7 @@ const TransactionElementAmount = ({ amount }) => {
     return (
         <HStack className='gap-1 align-middle justify-end font-bold'>
             <FaDollarSign className="text-sm" />
-            {amount.toFixed(2)}
+            {Number.parseFloat(amount).toFixed(2)}
         </HStack>
     )
 }
@@ -71,10 +73,10 @@ const TransactionElement = ({ transaction }) => {
                     <TransactionElementAmount amount={transaction.amount} />
                 </HStack>
                 <div className="flex-wrap flex py-2 h-auto gap-2">
-                    {transaction.tags.map(t => (<TransactionElementTag tag_id={t} />))}
+                    {transaction.tags.map(t => (<TransactionElementTag tag_id={t} key={t.id + transaction.id} />))}
                     <TransactionElementTag />
                 </div>
-                <div>{transaction.date.toDateString()}</div>
+                <div>{"transaction.date"}</div>
             </VStack>
         </HStack>
     )
@@ -91,7 +93,7 @@ const TransactionList = ({ transactions, selectedCategoryId, filteredTagIds }) =
     return (
         <VStack className=' overflow-y-auto scrollbar-hide items-start justify-start'>
             {displayTransactions.map(t => (
-                <TransactionElement transaction={t} />
+                <TransactionElement transaction={t} key={t.id} />
             ))}
         </VStack>
     )
@@ -147,7 +149,9 @@ function createNewTransaction(category = null, amount = null, tags = null) {
 
 const PieChartPage = () => {
 
-    const [allTransactions, setAllTransactions] = useState(generateList(createNewTransaction, 40))
+    const [allTransactions, setAllTransactions] = useState([])
+    const [categories, setCategories] = useState([])
+    const [tags, setTags] = useState([])
 
     const [selectedCategoryId, setSelectedCategoryId] = useState(null)
     const [filteredTagIds, setFilteredTagIds] = useState([
@@ -213,6 +217,11 @@ const PieChartPage = () => {
     }
 
     // setKeyBindings()
+    useEffect(() => {
+        dbSet(setTags, 'user_201BAA2A-0DA7-413D-BFD8-EC6E55F891B2', 'tag')
+        dbSet(setCategories, 'user_201BAA2A-0DA7-413D-BFD8-EC6E55F891B2', 'category')
+        dbSet(setAllTransactions, 'user_201BAA2A-0DA7-413D-BFD8-EC6E55F891B2', 'transaction')
+    }, [])
     return (
         <div className='flex flex-col-reverse md:flex-row h-screen items-center bg-[#272727] text-white w-screen font-rhaz text-sm'>
             <VStack className='max-w-[500px] overflow-y-auto h-full bg-[#222222]'>

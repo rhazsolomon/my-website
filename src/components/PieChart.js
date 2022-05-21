@@ -9,14 +9,14 @@ const PieChartValue = ({ data, d }) => {
                     className="text-2xl font-medium"
                     style={{ transition: 'color 0s', color: d.color }}
                 >
-                    {d.value.toFixed(2)}
+                    {Number.parseFloat(d.value).toFixed(2)}
                 </div>
             )}
             <div
                 className={`${d ? 'opacity-30 text-l' : 'text-2xl font-medium'}`}
                 style={{ transition: '1s' }}
             >
-                {total.toFixed(2)}
+                {Number.parseFloat(total).toFixed(2)}
             </div>
         </div>
     )
@@ -52,6 +52,7 @@ const PieChart = ({ data, selectedCategoryId, setSelectedCategoryId }) => {
         <div className="relative w-full h-full max-h-80 max-w-80">
             <div className=" w-full h-full absolute">
                 <Pie
+                    key={'234'}
                     data={data}
                     lineWidth={40}
                     onClick={(e, i) => { toggleSelectedIndex(i) }}
@@ -62,7 +63,7 @@ const PieChart = ({ data, selectedCategoryId, setSelectedCategoryId }) => {
                     className={''}
                     onMouseOver={(e) => { e.target.style.opacity = '90%' }}
                     onMouseOut={(e) => { e.target.style.opacity = '100%' }}
-                    label={() => { return (<div>Hello</div>) }}
+                    label={() => { }}
                     labelPosition={50}
                     labelStyle={{}}
                 />
