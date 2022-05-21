@@ -3,7 +3,7 @@ import { useState } from "react";
 import VStack from "../components/VStack";
 import HStack from "../components/HStack";
 
-import { generateList, random, sample, subset, randomDate } from "../utility/util";
+import { generateList, random, sample, subset, randomDate, parseCSV } from "../utility/util";
 
 import { FaDollarSign, FaEnvira, FaTag, FaPlus, FaArrowUp, FaFilter } from "react-icons/fa";
 import PieChart from "../components/PieChart";
@@ -77,10 +77,11 @@ const TransactionElement = ({ transaction }) => {
                 <div>{transaction.date.toDateString()}</div>
             </VStack>
         </HStack>
-
-
     )
 }
+
+
+
 
 const TransactionList = ({ transactions, selectedCategoryId, filteredTagIds }) => {
     const displayTransactions = (transactions
@@ -141,10 +142,12 @@ function createNewTransaction(category = null, amount = null, tags = null) {
     }
 }
 
-const allTransactions = generateList(createNewTransaction, 40)
+
 
 
 const PieChartPage = () => {
+
+    const [allTransactions, setAllTransactions] = useState(generateList(createNewTransaction, 40))
 
     const [selectedCategoryId, setSelectedCategoryId] = useState(null)
     const [filteredTagIds, setFilteredTagIds] = useState([
@@ -182,9 +185,38 @@ const PieChartPage = () => {
         return data.sort((a, b) => a.name.localeCompare(b.name))
     }
 
+    async function handleFileInput(e) {
+        const file = e.target.files[0]
+        const text = await file.text()
+        const transactionHints = parseCSV(text)
+
+        const transactionHintToTransaction = (th) => {
+            const [day, month, year] = th['Date'].split('/')
+            return {
+                category: 'category_8A13196D-5F8C-4FC6-934F-979ECA2FA9AD',
+                amount: Math.abs(Number.parseFloat(th['Amount'])),
+                date: new Date(year, month, day),
+                tags: []
+            }
+        }
+        const isValidTransactionHint = (th) => {
+            try {
+                transactionHintToTransaction(th)
+                if (th['Amount'] === undefined) { return false }
+                if (th['Date'] === undefined) { return false }
+                return true
+            } catch (error) {
+                return false
+            }
+        }
+        setAllTransactions(transactionHints.filter(isValidTransactionHint).map(transactionHintToTransaction))
+    }
+
+    // setKeyBindings()
     return (
         <div className='flex flex-col-reverse md:flex-row h-screen items-center bg-[#272727] text-white w-screen font-rhaz text-sm'>
             <VStack className='max-w-[500px] overflow-y-auto h-full bg-[#222222]'>
+                <input type={'file'} onChange={handleFileInput} />
                 <Filter filteredTagIds={filteredTagIds} setFilteredTagIds={setFilteredTagIds} orderByIdx={orderByIdx} setOrderByIdx={setOrderByIdx} orderAscending={orderAscending} setOrderAscending={setOrderAscending} />
                 <TransactionList transactions={transactions} selectedCategoryId={selectedCategoryId} filteredTagIds={filteredTagIds} />
             </VStack>

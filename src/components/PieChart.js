@@ -2,7 +2,6 @@ import { PieChart as Pie } from "react-minimal-pie-chart";
 
 const PieChartValue = ({ data, d }) => {
     const total = data.reduce((a, b) => a + b.value, 0)
-    console.log(data)
     return (
         <div className="flex flex-col h-full justify-center items-center content-center">
             {d && (
@@ -25,8 +24,6 @@ const PieChartValue = ({ data, d }) => {
 
 
 const PieChart = ({ data, selectedCategoryId, setSelectedCategoryId }) => {
-    console.log("Hello")
-
     const computeSegmentsShift = (i) => {
         if (data[i].name === selectedCategoryId) { return 4 }
         return 0

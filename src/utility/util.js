@@ -36,3 +36,19 @@ function range(n) {
     }
     return ret
 }
+
+export function parseCSV(text) {
+    const lines = text.split('\r\n')
+    const headers = lines[0].split(',')
+    const payments = lines.splice(1)
+    const ret = []
+    for (const payment of payments) {
+        const obj = {}
+        const values = payment.split(',')
+        for (let i = 0; i < values.length; i++) {
+            obj[headers[i]] = values[i]
+        }
+        ret.push(obj)
+    }
+    return ret
+}

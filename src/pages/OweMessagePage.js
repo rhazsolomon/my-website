@@ -38,7 +38,7 @@ const OweMessagePage = () => {
             </VStack>
             {total}
             <form onSubmit={e => { addMessage("Rhaz", parseFloat(e.target[0].value)); e.preventDefault() }}>
-                <input type='text' className="bg-blue-100" onSubmit={e => console.log(e + "er")} name="amount" />
+                <input type='text' className="bg-blue-100" name="amount" />
             </form>
 
         </VStack>

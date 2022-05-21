@@ -9,12 +9,14 @@ import {
   Route,
   Routes,
 } from "react-router-dom";
+import LandingPage from './pages/LandingPage';
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path='/' element={<MyResume />} />
+        <Route path='/' element={<LandingPage />} />
+        <Route path='/resume' element={<MyResume />} />
         <Route path='/pie' element={<PieChartPage />} />
       </Routes>
     </Router>
