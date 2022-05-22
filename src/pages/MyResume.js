@@ -8,6 +8,7 @@ import profile from '../static/profile.jpeg'
 import { FiMapPin, FiPhone, FiMail, FiGlobe } from 'react-icons/fi'
 import resumeData from '../static/resume_data'
 import MyResumeSmallScreen from "./MyResumeSmallScreen";
+import BounceButton from '../components/BounceButton'
 
 const ProfilePicture = () => {
     return (
@@ -63,7 +64,9 @@ const ExperienceSectionInfo = ({ info }) => {
     return (
         <HStack className="pb-4 gap-4 ">
             <VStack className='text-left items-start w-52'>
-                <a href={info.href}><h2 className="uppercase font-bold mb-1 hover:text-slate-500 hover:scale-105">{info.company}</h2></a>
+                <BounceButton>
+                    <a href={info.href}><h2 className=" text-left uppercase font-bold mb-1 hover:text-slate-500">{info.company}</h2></a>
+                </BounceButton>
                 <h3 className="text-slate-400">{info.date}</h3>
             </VStack>
             <VStack>

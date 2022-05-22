@@ -38,12 +38,13 @@ const PieChart = ({ data, selectedCategoryId, setSelectedCategoryId }) => {
     }
     const computeSegmentsStyle = (i) => {
         const friendlyTransition = 'd 0.4s cubic-bezier(.32,.34,.4,3.45)'
+        const assertiveTransition = 'd 0.2s ease-in-out, opacity 0.2s'
         let opacity = '100%'
         if (selectedCategoryId !== null) {
             opacity = data[i].name === selectedCategoryId ? '100%' : '20%'
         }
         return {
-            transition: selectedCategoryId === data[i].name ? friendlyTransition : 'd 0.2s ease-in-out, opacity 0.2s',
+            transition: selectedCategoryId === data[i].name ? friendlyTransition : assertiveTransition,
             stroke: data[i].color,
             opacity: opacity
         }
@@ -67,6 +68,7 @@ const PieChart = ({ data, selectedCategoryId, setSelectedCategoryId }) => {
                     label={() => { }}
                     labelPosition={50}
                     labelStyle={{}}
+
                 />
             </div>
             <PieChartValue data={data} d={data.filter(d => d.name === selectedCategoryId)[0]} />

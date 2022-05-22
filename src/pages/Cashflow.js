@@ -162,7 +162,7 @@ function getLabel(categories, categoryId) {
 }
 const Cashflow = () => {
 
-
+    console.log(process.env.REACT_APP_VERSION_INFO)
     const [allTransactions, setAllTransactions] = useState([])
     const [categories, setCategories] = useState([])
     const [tags, setTags] = useState([])

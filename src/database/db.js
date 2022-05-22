@@ -13,7 +13,7 @@ import {
 } from 'firebase/firestore'
 import { v4 as uuidv4 } from 'uuid';
 
-export const userId = 'user_368f1e66-cdc6-4d5a-8c42-62cb11808bed'
+export const userId = 'user_5a5082f0-e649-4170-b1b6-120dc58f6276'
 
 const firebaseApp = initializeApp({
     apiKey: "AIzaSyDpVmW_TlGtXXZBaN12OV8eRBV8xsrCQ4w",
