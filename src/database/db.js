@@ -6,9 +6,14 @@ import {
     collection,
     doc,
     query,
-    where
+    where,
+    deleteDoc,
+    orderBy,
+    onSnapshot
 } from 'firebase/firestore'
 import { v4 as uuidv4 } from 'uuid';
+
+export const userId = 'user_368f1e66-cdc6-4d5a-8c42-62cb11808bed'
 
 const firebaseApp = initializeApp({
     apiKey: "AIzaSyDpVmW_TlGtXXZBaN12OV8eRBV8xsrCQ4w",
@@ -18,6 +23,7 @@ const firebaseApp = initializeApp({
     messagingSenderId: "352231566956",
     appId: "1:352231566956:web:551f88c4e93997f871b249"
 })
+
 const db = getFirestore(firebaseApp)
 
 async function getData(userId, label) {
@@ -28,11 +34,6 @@ async function getData(userId, label) {
     const transactionList = transactionSnapshot.docs.map(doc => doc.data())
     return transactionList
 
-}
-
-export async function dbSet(setter, userId, collectionName) {
-    const data = await getData(userId, collectionName)
-    setter(data)
 }
 
 export async function addCategory(userId, label, color) {
@@ -138,5 +139,38 @@ export async function createNewUserWithDefaults(name, email) {
     addTransaction(userId, 3, Date.parse('2022-03-12'), [tagIds[0], tagIds[1]], categoryIds[1])
     addTransaction(userId, 10, Date.parse('2022-03-12'), [], categoryIds[1])
     addTransaction(userId, 20, Date.parse('2022-03-12'), [tagIds[1]], categoryIds[2])
+    return userId
+}
 
+export async function deleteTransaction(transactionId) {
+    const userCol = collection(db, 'user')
+    const userDoc = doc(userCol, userId)
+    await deleteDoc(doc(userDoc, "transaction", transactionId));
+
+}
+
+
+export function streamTransactions(snapshot, error) {
+    // This helped a lot
+    //  https://blog.logrocket.com/how-to-use-react-hooks-firebase-firestore/
+    const transactionCol = collection(db, 'user', userId, 'transaction')
+    const itemsQuery = query(transactionCol, orderBy('date'))
+    return onSnapshot(itemsQuery, snapshot, error)
+}
+
+export function streamCategories(snapshot, error) {
+    // This helped a lot
+    //  https://blog.logrocket.com/how-to-use-react-hooks-firebase-firestore/
+    const categoryCol = collection(db, 'user', userId, 'category')
+    const itemsQuery = query(categoryCol)
+    return onSnapshot(itemsQuery, snapshot, error)
+
+}
+
+export function streamTags(snapshot, error) {
+    // This helped a lot
+    //  https://blog.logrocket.com/how-to-use-react-hooks-firebase-firestore/
+    const tagCollection = collection(db, 'user', userId, 'tag')
+    const itemsQuery = query(tagCollection)
+    return onSnapshot(itemsQuery, snapshot, error)
 }

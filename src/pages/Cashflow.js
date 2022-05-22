@@ -5,10 +5,11 @@ import HStack from "../components/HStack";
 
 import { generateList, random, sample, subset, randomDate, parseCSV } from "../utility/util";
 
-import { FaDollarSign, FaEnvira, FaTag, FaPlus, FaArrowUp, FaFilter } from "react-icons/fa";
+import { FaDollarSign, FaEnvira, FaTag, FaPlus, FaArrowUp, FaFilter, FaTrash } from "react-icons/fa";
 import PieChart from "../components/PieChart";
-import { dbSet } from "../database/db";
-import { getByLabelText } from "@testing-library/react";
+import { addTransaction, dbSet, deleteTransaction, streamTransactions, streamCategories, streamTags, userId } from "../database/db";
+import BounceButton from "../components/BounceButton";
+
 
 const orderByOptions = ['Date', 'Amount']
 
@@ -25,10 +26,12 @@ const TransactionElementCategory = ({ category, categories }) => {
     console.log(category)
     console.log(categories)
     return (
-        <HStack className="gap-2 border-[1pt] h-auto w-auto py-1 px-2 rounded-lg" style={{ borderColor: getColor(categories, category) }}>
-            <FaEnvira style={{ fill: getColor(categories, category) }} />
-            {getLabel(categories, category)}
-        </HStack>
+        <BounceButton>
+            <HStack className="gap-2 border-[1pt] h-auto w-auto py-1 px-2 rounded-lg" style={{ borderColor: getColor(categories, category) }}>
+                <FaEnvira style={{ fill: getColor(categories, category) }} />
+                {getLabel(categories, category)}
+            </HStack>
+        </BounceButton>
     )
 }
 
@@ -42,17 +45,25 @@ const TransactionElementTag = ({ tag_id }) => {
         </>)
     }
     return (
-        <HStack className='w-min inline h-auto border-[1pt] gap-2 border-gray-500 text-gray-500 px-4 rounded-full py-1'>
-            {content}
-        </HStack>
+        <BounceButton>
+            <HStack className='w-min inline h-auto border-[1pt] gap-2 border-gray-500 text-gray-500 px-4 rounded-full py-1'>
+                {content}
+            </HStack>
+        </BounceButton>
+
     )
 }
 
 const TransactionElement = ({ transaction, categories }) => {
     return (
         <HStack className='p-4 gap-3 hover:bg-[#272727] h-auto'>
+            <BounceButton onClick={() => deleteTransaction(transaction.id)}>
+                <FaTrash />
+            </BounceButton>
+
             <div className="w-1 h-full  rounded ml-2"
-                style={{ backgroundColor: getColor(categories, transaction.categoryId) }}></div>
+                style={{ backgroundColor: getColor(categories, transaction.categoryId) }}>
+            </div>
             <VStack className='max-w-[600px] h-auto  '>
                 <HStack className="w-full h-auto">
                     <TransactionElementCategory category={transaction.categoryId} categories={categories} />
@@ -119,7 +130,11 @@ const Filter = ({ filteredTagIds, setFilteredTagIds, orderByIdx, setOrderByIdx, 
 }
 
 
+
 function getColor(categories, categoryId) {
+    if (categoryId === null) {
+        return 'rgba(100, 100, 100, 0.5)'
+    }
     if (categories === undefined) {
         return 'blue'
     }
@@ -132,6 +147,9 @@ function getColor(categories, categoryId) {
 }
 
 function getLabel(categories, categoryId) {
+    if (categoryId === null) {
+        return 'Unknown'
+    }
     if (categories === undefined) {
         return 'undefined'
     }
@@ -142,8 +160,8 @@ function getLabel(categories, categoryId) {
         return 'not found'
     }
 }
-const PieChartPage = () => {
-    const userId = 'user_1b28bb8d-ea48-42cc-acda-4266c3180159'
+const Cashflow = () => {
+
 
     const [allTransactions, setAllTransactions] = useState([])
     const [categories, setCategories] = useState([])
@@ -212,21 +230,54 @@ const PieChartPage = () => {
                 return false
             }
         }
-        setAllTransactions(transactionHints.filter(isValidTransactionHint).map(transactionHintToTransaction))
+        const allNewTransactions = transactionHints.filter(isValidTransactionHint).map(transactionHintToTransaction)
+        allNewTransactions.map((t) => {
+            addTransaction(userId, t.amount, t.date, [], null)
+        })
+
+        setAllTransactions(allNewTransactions)
     }
 
     // setKeyBindings()
     useEffect(() => {
 
-        (async () => {
-            await Promise.all([
-                dbSet(setTags, userId, 'tag'),
-                dbSet(setCategories, userId, 'category'),
-                dbSet(setAllTransactions, userId, 'transaction'),
-            ])
-        })()
+        // (async () => {
+        //     await Promise.all([
+        //         dbSet(setTags, userId, 'tag'),
+        //         dbSet(setCategories, userId, 'category'),
+        //         dbSet(setAllTransactions, userId, 'transaction'),
+        //     ])
+        // })()
 
-    }, [])
+        const unsubscribeTransactions = streamTransactions(
+            (querySnapshot) => {
+                const updatedTransactions = querySnapshot.docs.map(d => d.data())
+                setAllTransactions(updatedTransactions)
+            },
+            (error) => { console.log(error, "Error dude. (RS01)") }
+        )
+        const unsubscribeCategories = streamCategories(
+            (querySnapshot) => {
+                const updatedCategories = querySnapshot.docs.map(d => d.data())
+                setCategories(updatedCategories)
+            },
+            (error) => { console.log(error, "Error dude. (RS02)") }
+        )
+        const unsubscribeTags = streamTags(
+            (querySnapshot) => {
+                const updatedTags = querySnapshot.docs.map(d => d.data())
+                setTags(updatedTags)
+            },
+            (error) => { console.log(error, "Error dude. (RS03)") }
+        )
+        return () => {
+            unsubscribeTransactions()
+            unsubscribeCategories()
+            unsubscribeTags()
+        }
+    }, [setAllTransactions])
+
+    useEffect(() => console.log("And again"), [])
     return (
         <div className='flex flex-col-reverse md:flex-row h-screen items-center bg-[#272727] text-white w-screen font-rhaz text-sm'>
             <VStack className='max-w-[500px] overflow-y-auto h-full bg-[#222222]'>
@@ -240,4 +291,4 @@ const PieChartPage = () => {
     )
 }
 
-export default PieChartPage;
+export default Cashflow;
