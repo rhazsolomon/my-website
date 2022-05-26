@@ -1,19 +1,22 @@
 import { initializeApp } from 'firebase/app'
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 import {
     getFirestore,
     getDocs,
+    getDoc,
     setDoc,
     collection,
     doc,
     query,
     where,
+    limit,
     deleteDoc,
     orderBy,
     onSnapshot
 } from 'firebase/firestore'
 import { v4 as uuidv4 } from 'uuid';
 
-export const userId = 'user_5a5082f0-e649-4170-b1b6-120dc58f6276'
+export let userId = 'user_5a5082f0-e649-4170-b1b6-120dc58f6276'
 
 const firebaseApp = initializeApp({
     apiKey: "AIzaSyDpVmW_TlGtXXZBaN12OV8eRBV8xsrCQ4w",
@@ -25,6 +28,7 @@ const firebaseApp = initializeApp({
 })
 
 const db = getFirestore(firebaseApp)
+const auth = getAuth()
 
 async function getData(userId, label) {
     const userCol = collection(db, 'user')
@@ -173,4 +177,20 @@ export function streamTags(snapshot, error) {
     const tagCollection = collection(db, 'user', userId, 'tag')
     const itemsQuery = query(tagCollection)
     return onSnapshot(itemsQuery, snapshot, error)
+}
+
+export async function getUserWithUID(uid) {
+    const userRef = collection(db, 'user')
+    const q = query(userRef, where("uid", "==", uid), limit(1))
+    const qSnapshot = await getDocs(q)
+    let res = null
+    qSnapshot.forEach((d) => {
+        res = d.data()
+    })
+    return res.id
+}
+export async function signIn(email, password) {
+    const userCred = await signInWithEmailAndPassword(auth, email, password)
+    userId = await getUserWithUID(userCred.user.uid)
+    return userCred.user
 }
