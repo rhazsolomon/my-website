@@ -1,37 +1,32 @@
 import { useState } from "react"
-import { signIn } from "../database/db"
-import Cashflow from "./Cashflow"
 
-const SignInForm = ({ setUser }) => {
-    const signInAndSet = async (email) => {
-        const user = await signIn(email, '123456')
-        setUser(user)
-    }
+const Gallery = (props) => {
     return (
-        <div className="bg-slate-200 w-1/2 p-4 rounded-md flex flex-col gap-2">
-            <button
-                className="bg-slate-300 p-2"
-                onClick={() => signInAndSet('rhaz.solomon@gmail.com')}
-            >Rhaz Solomon</button>
-            <button
-                className="bg-slate-300 p-2"
-                onClick={() => signInAndSet('ben.thunder@test.com')}
-            >Ben Thunder</button>
-
+        <div>
+            {props.children.map((c, idx) => {
+                return (
+                    <div
+                        className={`transition-all duration-500 absolute ${props.idx == idx ? 'opacity-80' : 'opacity-0 scale-50'}`}>
+                        {c}
+                    </div>
+                )
+            })}
         </div>
     )
 }
-
 const Playground = () => {
 
-    const [user, setUser] = useState(null)
 
+    const [idx, setIdx] = useState(0)
     return (
-        <div>
-
-            {!user && <SignInForm setUser={setUser} />}
-            {user && <Cashflow />}
-        </div>
+        <div className="flex justify-center w-full h-screen items-center ">
+            <button onClick={() => setIdx(idx + 1)}>Hello</button>
+            <Gallery idx={idx}>
+                <div className="w-20 h-20 bg-red-200">hello</div>
+                <div className="w-20 h-20 bg-orange-200">hello</div>
+                <div className="w-20 h-20 bg-green-200">hello</div>
+            </Gallery>
+        </div >
     )
 }
 

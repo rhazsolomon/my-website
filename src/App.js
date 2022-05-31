@@ -12,6 +12,7 @@ import {
 import LandingPage from './pages/LandingPage';
 import Playground from './pages/Playground';
 import CashflowAdmin from './pages/CashflowAdmin';
+import CashflowLogin from './pages/CashflowLogin';
 
 
 function App() {
@@ -20,7 +21,7 @@ function App() {
       <Routes>
         <Route path='/' element={<LandingPage />} />
         <Route path='/resume' element={<MyResume />} />
-        <Route path='/cashflow' element={<Cashflow />} />
+        <Route path='/cashflow' element={<CashflowLogin />} />
         <Route path='/cashflow-admin' element={<CashflowAdmin />} />
         <Route path='/playground' element={<Playground />} />
       </Routes>
