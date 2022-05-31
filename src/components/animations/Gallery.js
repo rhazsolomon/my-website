@@ -4,7 +4,7 @@ const Gallery = (props) => {
             {props.children.map((c, idx) => {
                 return (
                     <div
-                        className={`transition-all  w-full  duration-500 absolute ${props.idx == idx ? 'opacity-80' : 'opacity-0 scale-50'}`}>
+                        className={`transition-all  w-full  duration-500 absolute ${props.idx == idx ? 'opacity-80' : 'opacity-0 scale-0'}`}>
                         {c}
                     </div>
                 )
