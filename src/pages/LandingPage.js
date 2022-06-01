@@ -12,6 +12,7 @@ import { FaGraduationCap } from "react-icons/fa";
 import Gallery from "../components/animations/Gallery";
 import { useState } from "react";
 import SocialLinks from "../components/SocialLinks";
+import MyResumeSmallScreen from "./MyResumeSmallScreen";
 
 const ProjectItem = (props) => {
     return (
@@ -116,7 +117,7 @@ const LandingPage = () => {
     return (
         <>
             <LandingPageHorizontal className="lg:block hidden " />
-            <LandingPageVertical className="lg:hidden block " />
+            <MyResumeSmallScreen className="lg:hidden block" />
         </>
     )
 }
