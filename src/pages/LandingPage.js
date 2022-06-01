@@ -28,7 +28,7 @@ const ProjectItem = (props) => {
 
 
 const GalleryComponent = () => {
-    const [idx, setIdx] = useState(1)
+    const [idx, setIdx] = useState(0)
     const TraverseButton = ({ index, icon }) => {
         return (
             <BounceButton onClick={() => setIdx(index)} className={`w-10 h-10 rounded-full ${idx == index ? 'border-[#66A1B5] border-[1px]' : ''}  text-[#66A1B5] justify-center flex items-center`}>
@@ -92,20 +92,32 @@ const BannerPicture = () => {
         <img className="h-full rounded-2xl shadow-md shadow- shadow-slate-700" src={profile1} />
     )
 }
-const LandingPage = () => {
 
-
+const LandingPageHorizontal = (props) => {
     return (
-        <div className="w-screen h-screen bg-black font-rhaz">
+        <div className={`${props.className} w-screen h-screen bg-black font-rhaz`}>
             <svg viewBox="0 0 1512 982" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute z-10 h-full">
                 <path d="M0 1H239.5L469 982H0V1Z" fill="#739FB3" />
             </svg>
             <HStack className="p-40 z-20 absolute">
-
                 <BannerPicture />
                 <GalleryComponent />
             </HStack>
         </div >
+    )
+}
+const LandingPageVertical = (props) => {
+    return (<div className={`${props.className}`}>
+        Still working on this!
+    </div>)
+
+}
+const LandingPage = () => {
+    return (
+        <>
+            <LandingPageHorizontal className="lg:block hidden " />
+            <LandingPageVertical className="lg:hidden block " />
+        </>
     )
 }
 
