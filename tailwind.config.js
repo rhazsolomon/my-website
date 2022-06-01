@@ -29,7 +29,8 @@ module.exports = {
         'rhaz-primary': '#46BBFE',
         'white': 'white',
         'black': 'black',
-        'debug': '#AF9393',
+        'debug': 'rgba(255, 200, 200, 0.2)',
+        'debug-1': 'rgba(200, 255, 200, 0.2)',
         'transparent': 'transparent',
       },
       fontFamily: {

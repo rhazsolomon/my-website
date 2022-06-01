@@ -1,6 +1,6 @@
 const Gallery = (props) => {
     return (
-        <div className="w-full h-full relative">
+        <div className={`${props.className} w-full h-full relative`}>
             {props.children.map((c, idx) => {
                 return (
                     <div
