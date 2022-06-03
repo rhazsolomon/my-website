@@ -1,6 +1,7 @@
 # Rhaz's Person Website
 
 Hello!  This is the repository for my personal website.
+https://rhaz.me
 
 This website is a presentation of me, as a developer, to the world.  My intention is to build on it over time and improve it as I go.
 
