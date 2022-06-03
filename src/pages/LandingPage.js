@@ -28,22 +28,29 @@ const ProjectItem = (props) => {
 }
 
 const ProjectLink = ({ title, icon, link, inProgress, description }) => {
-    return (
+    const button = (
+        <BounceButton className='text-left'>
+            <VStack className="bg-[#3D424D] shadow-lg shadow-black w-64  p-4 rounded-lg gap-3">
+                <div className="text-4xl">{icon}</div>
+                <div className="font-bold text-rhaz-primary align-middle">
+                    <span>{title}</span>
+                    {inProgress && (
+                        <span className="rounded-full bg-slate-500 text-rhaz-major-grey py-1 px-4 text-sm ml-2">In Progress</span>
+                    )}
+                </div>
+                <p className="text-xs">{description}</p>
+            </VStack>
+        </BounceButton>
+    )
+    return link.startsWith("/") ? (
 
         <Link to={link} target={'_blank'}>
-            <BounceButton className='text-left'>
-                <VStack className="bg-[#3D424D] shadow-lg shadow-black w-64  p-4 rounded-lg gap-3">
-                    <div className="text-4xl">{icon}</div>
-                    <div className="font-bold text-rhaz-primary align-middle">
-                        <span>{title}</span>
-                        {inProgress && (
-                            <span className="rounded-full bg-slate-500 text-rhaz-major-grey py-1 px-4 text-sm ml-2">In Progress</span>
-                        )}
-                    </div>
-                    <p className="text-xs">{description}</p>
-                </VStack>
-            </BounceButton>
+            {button}
         </Link>
+    ) : (
+        <a href={link} target='_blank'>
+            {button}
+        </a>
     )
 }
 const SummaryComponent = () => {
@@ -74,7 +81,7 @@ const ProjectsComponent = () => {
             </div>
             <HStack className='gap-10 overflow-auto items-center p-5'>
                 <ProjectLink link="/resume" title={'Resume'} icon={<FaGraduationCap />} description={resumeDescription} />
-                <ProjectLink title={'Cashflow'} icon={<FiPieChart />} inProgress link={"/cashflow"} description={cashflowDescription} />
+                <ProjectLink title={'Cashflow'} icon={<FiPieChart />} inProgress link={"https://cashflow.rhaz.me"} description={cashflowDescription} />
             </HStack>
         </div>
     )

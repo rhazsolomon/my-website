@@ -21,9 +21,6 @@ function App() {
       <Routes>
         <Route path='/' element={<LandingPage />} />
         <Route path='/resume' element={<MyResume />} />
-        <Route path='/cashflow' element={<CashflowLogin />} />
-        <Route path='/cashflow-admin' element={<CashflowAdmin />} />
-        <Route path='/playground' element={<Playground />} />
       </Routes>
     </Router>
   );
