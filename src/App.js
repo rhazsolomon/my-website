@@ -9,6 +9,7 @@ import {
   Routes,
 } from "react-router-dom";
 import LandingPage from './pages/LandingPage';
+import MyBlog from './pages/MyBlog';
 
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
       <Routes>
         <Route path='/' element={<LandingPage />} />
         <Route path='/resume' element={<MyResume />} />
+        <Route path='/blog' element={<MyBlog />} />
       </Routes>
     </Router>
   );
